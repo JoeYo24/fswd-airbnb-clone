@@ -1,4 +1,5 @@
 import React from 'react';
+import Layout from '@src/layout';
 
 class BookingSuccess extends React.Component {
   state = {
@@ -37,20 +38,22 @@ class BookingSuccess extends React.Component {
     const { booking, loading } = this.state;
 
     return (
-      <div className="container">
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <div>
-            <h1>Booking Details</h1>
-            <p>Booking ID: {booking.id}</p>
-            <p>Start Date: {booking.start_date}</p>
-            <p>End Date: {booking.end_date}</p>
-            <p>Your payment is being processed!</p>
-          </div>
+      <Layout>
+        <div className="container">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <div>
+              <h1>Booking Details</h1>
+              <p>Booking ID: {booking.id}</p>
+              <p>Start Date: {booking.start_date}</p>
+              <p>End Date: {booking.end_date}</p>
+              <p>Your payment is being processed!</p>
+            </div>
 
-        )}
-      </div>
+          )}
+        </div>
+      </Layout>
     );
   }
 }
