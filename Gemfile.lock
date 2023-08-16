@@ -314,6 +314,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.1)
   sqlite3 (~> 1.4)
   stripe
+  tzinfo-data
   web-console (>= 4.2)
   webpacker (~> 5.0)
   webrick (~> 1.7)
