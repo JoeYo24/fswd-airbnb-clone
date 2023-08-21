@@ -9,6 +9,10 @@ json.properties do
     json.country property.country
     json.property_type property.property_type
     json.price_per_night property.price_per_night
-    json.image url_for(property.image) if property.image.attached?
+    if property.images.attached?
+      json.images url_for(property.images.first)
+    else
+      json.image_url nil
+    end
   end
 end

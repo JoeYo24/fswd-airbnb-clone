@@ -1,65 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { authenticityHeader } from '@utils/fetchHelper';
 
-const NewPropertyForm = (props) => {
-  const handleSubmit = (event) => {
+const NewPropertyForm = () => {
+  const [images, setImages] = useState([]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
+    console.log('form submitted');
 
-    const newProperty = {
-      title: formData.get('title'),
-      description: formData.get('description'),
-      city: formData.get('city'),
-      country: formData.get('country'),
-      property_type: formData.get('property_type'),
-      price_per_night: formData.get('price_per_night'),
-      max_guests: formData.get('max_guests'),
-      bedrooms: formData.get('bedrooms'),
-      beds: formData.get('beds'),
-      baths: formData.get('baths'),
-      images: formData.getAll('images[]'),
-    };
+    const form = document.getElementById('propertyForm');
+    console.log('form element: ', form);
 
-    const formDataToSend = new FormData();
-    newProperty.images.forEach((image) => {
-      formDataToSend.append('property[images][]', image);
-    });
-    formDataToSend.append('property[title]', newProperty.title);
-    formDataToSend.append('property[description]', newProperty.description);
-    formDataToSend.append('property[city]', newProperty.city);
-    formDataToSend.append('property[country]', newProperty.country);
-    formDataToSend.append('property[property_type]', newProperty.property_type);
-    formDataToSend.append('property[price_per_night]', newProperty.price_per_night);
-    formDataToSend.append('property[max_guests]', newProperty.max_guests);
-    formDataToSend.append('property[bedrooms]', newProperty.bedrooms);
-    formDataToSend.append('property[beds]', newProperty.beds);
-    formDataToSend.append('property[baths]', newProperty.baths);
+    if (!form) {
+      console.error('Form not found');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('property[title]', form.title.value);
+    formData.append('property[description]', form.description.value);
+    formData.append('property[city]', form.city.value);
+    formData.append('property[country]', form.country.value);
+    formData.append('property[property_type]', form.property_type.value);
+    formData.append('property[price_per_night]', form.price_per_night.value);
+    formData.append('property[max_guests]', form.max_guests.value);
+    formData.append('property[bedrooms]', form.bedrooms.value);
+    formData.append('property[beds]', form.beds.value);
+    formData.append('property[baths]', form.baths.value);
+    formData.append('property[images][]', images);
 
-    fetch('/api/properties', {
-      method: 'POST',
-      headers: {
-        ...authenticityHeader(),
-      },
-      body: formDataToSend,
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Network response was not ok.');
-      })
-      .then((responseJSON) => {
-        console.log(responseJSON);
-      })
-      .catch((error) => {
-        console.error('There has been a problem with your fetch operation: ', error.message);
+    try {
+      const response = await fetch('/api/properties', {
+        method: 'POST',
+        headers: {
+          ...authenticityHeader(),
+        },
+        body: formData,
       });
+
+      if (response.ok) {
+        form.reset();
+        setImages([]);
+        const responseJSON = await response.json();
+        console.log(responseJSON);
+      } else {
+        throw new Error('Network response was not ok.');
+      }
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation: ', error.message);
+      console.log('Response: ', error.response);
+    }
+  };
+
+  const handleImageChange = (event) => {
+    const newImages = Array.from(event.target.files);
+    setImages(newImages);
   };
 
   return (
     <div className='container'>
-        <form className='needs-validation' onSubmit={handleSubmit}>
+        <form className='needs-validation' id='propertyForm'>
             <div className='mb-3'>
                 <label className='form-label' htmlFor="title">Title</label> <br />
                 <input type="text" name="title" className='form-control' id="title" />
@@ -105,11 +104,22 @@ const NewPropertyForm = (props) => {
                 <input className='form-control' type="number" name="baths" id="baths" />
             </div>
             <div className='mb-3'>
-                <label className='form-label' htmlFor="images">Images</label>{' '} <br />
-                <input className='form-control' type="file" name="images[]" id="images" multiple />
+              <label className='form-label' htmlFor='images'>
+                Images
+              </label>{' '}
+              <br />
+              <input
+                className='form-control'
+                type='file'
+                name='images[]'
+                id='images'
+                accept='image/*'
+                multiple
+                onChange={handleImageChange}
+              />
             </div>
             <div className='mb-3'>
-                <input className='btn btn-primary' type="submit" value="Create Property" />
+                <input className='btn btn-primary' type="submit" value="Create Property" onClick={handleSubmit} />
             </div>
         </form>
     </div>

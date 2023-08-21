@@ -38,7 +38,7 @@ class UserProperties extends React.Component {
           {properties.map((property) => (
             <div key={property.id} className="col-6 col-lg-4 mb-4 property">
               <a href={`/property/${property.id}`} className="text-body text-decoration-none">
-                <img src={property.image_url} className="w-100 mb-2 property-image rounded" />
+                <img src={property.images} className="w-100 mb-2 property-image rounded" />
                 <p className="text-uppercase mb-0 text-secondary"><small><b>{property.city}</b></small></p>
                 <h6 className="mb-0">{property.title}</h6>
                 <p className="mb-0"><small>${property.price_per_night} USD/night</small></p>

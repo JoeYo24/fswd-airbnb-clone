@@ -9,8 +9,14 @@ json.property do
   json.max_guests @property.max_guests
   json.bedrooms @property.bedrooms
   json.beds @property.beds
-  json.baths @property.baths
-  json.image url_for(@property.image) if @property.image.attached?
+  json.baths @property.baths 
+  if @property.images.attached?
+    json.images do 
+      json.url url_for(@property.images.first)
+    end
+  else
+    json.image_url nil
+  end
 
   json.user do
     if @property.user
