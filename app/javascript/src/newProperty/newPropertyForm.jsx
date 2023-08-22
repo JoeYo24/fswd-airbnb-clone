@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { authenticityHeader } from '@utils/fetchHelper';
+import { safeCredentialsForm } from '../utils/fetchHelper';
 
 const NewPropertyForm = () => {
   const [images, setImages] = useState([]);
@@ -15,9 +15,12 @@ const NewPropertyForm = () => {
       console.error('Form not found');
       return;
     }
-    const fileInputElement = document.querySelector('#image');
+    const fileInputElement = document.querySelector('#images');
 
     const formData = new FormData();
+    for (let i = 0; i < fileInputElement.files.length; i++) {
+      formData.append('property[images][]', fileInputElement.files[i]);
+    }
     formData.append('property[title]', form.title.value);
     formData.append('property[description]', form.description.value);
     formData.append('property[city]', form.city.value);
@@ -28,16 +31,12 @@ const NewPropertyForm = () => {
     formData.append('property[bedrooms]', form.bedrooms.value);
     formData.append('property[beds]', form.beds.value);
     formData.append('property[baths]', form.baths.value);
-    formData.append('property[image]', fileInputElement.files[0]);
 
     try {
-      const response = await fetch('/api/properties', {
+      const response = await fetch('/api/properties', safeCredentialsForm({
         method: 'POST',
-        headers: {
-          ...authenticityHeader(),
-        },
         body: formData,
-      });
+      }));
 
       if (response.ok) {
         form.reset();
@@ -113,9 +112,9 @@ const NewPropertyForm = () => {
               <input
                 className='form-control'
                 type='file'
-                name='image'
-                id='image'
-                accept='image/*'
+                name='images'
+                id='images'
+                accept='images/*'
                 multiple
                 onChange={handleImageChange}
               />

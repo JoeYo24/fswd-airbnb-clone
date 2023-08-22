@@ -29,6 +29,7 @@ class Property extends React.Component {
 
   render() {
     const { property, loading } = this.state;
+    console.log(property);
     if (loading) {
       return <p>loading...</p>;
     }
@@ -49,7 +50,7 @@ class Property extends React.Component {
 
     return (
       <Layout>
-        <div className="property-image mb-3" style={{ backgroundImage: `url(${images})` }} />
+        <div className="property-image mb-3" style={{ backgroundImage: `url(${images[0].image_url})` }} />
 
         <div className="container">
           <div className="row">

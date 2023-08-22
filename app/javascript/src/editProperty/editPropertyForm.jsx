@@ -31,7 +31,7 @@ const EditPropertyForm = () => {
       bedrooms: formData.get('bedrooms'),
       beds: formData.get('beds'),
       baths: formData.get('baths'),
-      images: formData.get('images'),
+      image: formData.get('image'),
     };
     fetch(`/api/properties/${property.id}`, {
       method: 'PUT',
@@ -100,7 +100,7 @@ const EditPropertyForm = () => {
         </div>
         <div className='mb-3'>
           <label className='form-label' htmlFor="image">Image</label> <br />
-          <input className='form-control' type="file" name="images" id="images" />
+          <input className='form-control' type="file" name="image" id="image" />
         </div>
         <div className='mb-3'>
           <input className='btn btn-primary' type="submit" value="Edit Property" />
