@@ -15,6 +15,8 @@ const NewPropertyForm = () => {
       console.error('Form not found');
       return;
     }
+    const fileInputElement = document.querySelector('#image');
+
     const formData = new FormData();
     formData.append('property[title]', form.title.value);
     formData.append('property[description]', form.description.value);
@@ -26,7 +28,7 @@ const NewPropertyForm = () => {
     formData.append('property[bedrooms]', form.bedrooms.value);
     formData.append('property[beds]', form.beds.value);
     formData.append('property[baths]', form.baths.value);
-    formData.append('property[images][]', images);
+    formData.append('property[image]', fileInputElement.files[0]);
 
     try {
       const response = await fetch('/api/properties', {
@@ -111,8 +113,8 @@ const NewPropertyForm = () => {
               <input
                 className='form-control'
                 type='file'
-                name='images[]'
-                id='images'
+                name='image'
+                id='image'
                 accept='image/*'
                 multiple
                 onChange={handleImageChange}

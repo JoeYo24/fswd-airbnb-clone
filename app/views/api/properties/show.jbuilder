@@ -10,13 +10,7 @@ json.property do
   json.bedrooms @property.bedrooms
   json.beds @property.beds
   json.baths @property.baths 
-  if @property.images.attached?
-    json.images do 
-      json.url url_for(@property.images.first)
-    end
-  else
-    json.image_url nil
-  end
+  json.image_url url_for(@property.image) if @property.image.attached?
 
   json.user do
     if @property.user
