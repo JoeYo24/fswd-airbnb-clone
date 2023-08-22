@@ -15,7 +15,6 @@ module Api
       begin
         current_user = current_session.user
         @property = current_user.properties.create!(property_params)
-        @property.images.attach(params[:property][:images]) if params[:property][:images]
         render 'api/properties/create', status: :created
       rescue ArgumentError => e
         render json: { error: e.message }, status: :bad_request
@@ -27,7 +26,6 @@ module Api
 
       begin
         @property.update(property_params)
-        @property.images.attach(params[:property][:images]) if params[:property][:images]
         render 'api/properties/update', status: :ok
       rescue ArgumentError => e
         render json: { error: e.message }, status: :bad_request
@@ -69,7 +67,7 @@ module Api
     end
 
     def property_params
-      params.require(:property).permit(:title, :description, :city, :country, :property_type, :price_per_night, :max_guests, :bedrooms, :beds, :baths, images: [])
+      params.require(:property).permit(:title, :description, :city, :country, :property_type, :price_per_night, :max_guests, :bedrooms, :beds, :baths, :image)
     end    
   end
 end
